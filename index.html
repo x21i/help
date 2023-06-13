@@ -1,0 +1,718 @@
+#ch0
+@What IsAn Operating System
+
+ Operating System is an interface between users and computers.
+ An operating system is a system software that manages computer hardware and software.
+ Operating System is a recourse manager
+
+@Understand Why We Should Use Linux
+
+There are many reasons why Linux is a better operating system. Some of these are as follows:
+ Linux is Free
+ Open Source
+ Live CD
+ Multiple Desktop
+ Runs on any platform
+ Interoperability
+ No Reinstallations
+ No Virus
+ Security
+
+@Who IsUsing Linux ?
+
+Government Users                        Educational Users           Business
+Users                                                               -Oracle
+                                                                    -IBM
+Google                                                             -Panasonic
+Toyota Motor                                                       -•Cisco and Robotics
+                                                                    -Phillips
+                                                                    Amazon and •Wikipedi
+-U.S. Department of Defense, U.S.       -Russian Schools 
+Navy, U.S. Postal Service, U.S.         -German Universities
+Federal Court & etc                     -The Philippines
+                                        -Georgia
+                                        -Switzerland
+                                        -Schools
+                                        -Italy
+
+-French Parliament
+-Government of Mexico
+-Pakistan ISP’s / Schools & Colleges
+-Commercial Bank of China
+
+@Linux Distributions
+
+1.Red Hat RHEL
+2.Fedora, CentOS 
+3.Debian
+4.Ubuntu
+
+@Linux Runs On
+ Enterprise servers (Dell, HP, IBM, etc)
+ Desktops
+ Laptops
+ Single board (Raspberry Pi)
+ Phones (Android)
+
+6. Linux Roles
+ Servers: are usually unattended and handle data on behalf of other machines
+ File Servers, Web Servers, Mail Servers, Database Server etc.
+ Desktops: clients are more interactive, often graphical
+ Mobile isa tablet or phone.
+ Development ismuch like a desktop but with more capacity for development
+
+@Graphical Vs. Non-Graphical
+
+ Graphical mode runs an X-server, has windows, and menus.
+ Non-graphical mode is text only, focuseson shell access.
+ You can run multiple shells in graphical mode, each within their own window
+
+#ch1
+@Chapter # 1: What is kernel ?
+Kernels contain all drivers for all the various types of supported hardware, regardless if your system uses that hardware.
+• The Linux kernel was originally designed to be a monolithic kernel
+
+@Compiling the Kernel
+1) make clean
+2) make zImage/bzImage
+3) make modules
+4) make modules_install
+
+@Different Types of Kernel Images?
+• zImage and bzImage files have different layouts and loading algorithms.
+• The maximum allowed kernelsize for a zImage is 512Kb, where a bzImage does not pose this limit.
+• As a result the bzImage kernel is the preferred image type for larger kernels.
+• zImage will be loaded in low memory andbzImage can be loaded in high memory ifneeded
+
+
+#ch2
+Chapter 2: System Startup
+System Administrator should be able to query and modify the behavior of system services at various targets / run levels.
+• A thorough understanding of the systemd, SysV Init and the Linux boot proces is required
+
+@Crucial Terms & Utilities
+• /usr/lib/systemd/
+• systemctl
+• /etc/inittab
+• etc/init.d/
+• /etc/rc.d/
+• chkconfig
+
+@Creating System Startup
+• System startup can be created using two utilities.
+i) initrd
+ii) initramfs
+• initrd is a fixed-size block device, which requires to be 'formatted' by a filesystem 
+such as ext2.
+• initramfs is a cpio archive which is simply unpacked during boot to ramfs memory
+
+@Creating System Startup
+• Configuration of mkinitramfs is done througha configuration file: initramfs.conf. This file isusually located in/etc/initramfs-tools/initramfs.conf.
+• This configuration file is sourced by the script
+- it contains standard bash declarations. 
+Comments are prefixed by a #
+
+@The Linux Boot Process
+There are seven phases distinguishable during 
+boot:
+1. Kernel loader loading, setup and execution
+2. Register setup
+3. Kernel decompression
+4. Kernel and memory initialization
+5. Kernel setup
+6. Enabling of remaining CPU’s
+7. init process creation
+
+@The Linux Boot Process
+• The kernel’s final step in the boot process execute these commands in order:
+• /sbin/init
+• /etc/init
+• /bin/init
+• /bin/sh
+• If none of these succeed, the kernel will be 
+panic.
+
+@The init Process
+• init is the parent of all processes, it reads thefile /etc/init/rc-sysinit.conf (/etc/inittab) and creates processes based on its contents.
+• One of the things it usually does is spawn gettys allowing users to log in. It also defines “runlevels”.
+• A “runlevel” is a software configuration of the system which allows only a selected group of processes to exist
+
+@Runlevels
+• runlevel 0 (reserved) Runlevel 0 is used to halt the system.
+• runlevel 1 (reserved) Runlevel 1 is used to get the system in single user mode.
+• runlevel 2-5 Runlevels 2,3,4 and 5 are multi-user runlevels.
+• runlevel 6 Runlevel 6 is used to reboot the system.
+• runlevel 7-9 Runlevels 7, 8 and 9 can be used as you wish. Most of the Unix(/Linux) variants don’t use these runlevels
+
+@GRUB Boot Loader
+• GRUB (short for Grand Unified Bootloader) loads the operating system kernel and transfers execution control to it.
+• Two major versions of GRUB exist. The current version is known as GRUB but is in fact GRUB 2.
+• GRUB 2 has been developed around 2011. The older version was developed back in 1999 and is now referred to as GRUB Legacy. GRUB Legacy is still in use but its development has been frozen
+
+@GRUB Disk Description
+• GRUB uses its own syntax to describe hard disks. Device names need to be enclosed in brackets, e.g
+• (fd0) - denotes the floppy disk
+• (hd0) - denotes the hard disk
+• (hd0,1) - denotes the first partition on the first hard disk
+
+@GRUB Configuration File
+• The configuration file for GRUB 2 is/boot/grub/grub.cfg.
+• The GRUB configuration file is written in a shell-like scripting language with conditional statements and functions.
+Note: It is not recommended to modify grub.cfg 
+directly.
+
+@Rescue Boot Process
+• During boot file systems are checked.
+• All filesystems are checked based on the 
+contents of /etc/fstab
+• fsck command is used to boot process.
+• fsck command exit status.
+• 0 - No errors
+• 1 - File system errors corrected
+• 2 - System should be rebooted
+• 4 - File system errors left uncorrected
+• 8 - Operational erro
+
+#ch3
+@Chapter 3: File System & Devices
+• A file system consists of methods and data 
+structures that an operating system uses to keep 
+track of files on a disk or partition; that is, the 
+way the files are organized on the disk.
+• Different file systems in use:
+• ext 2/3/4
+• FAT 16/32/64
+• NTFS
+• LVM
+• NFS
+
+@Creating File System
+• This process is the equivalent of initializing the partition. Under Linux, the command to create a filesystem is called mkfs
+• Command syntax:
+• mkfs.ext* partitionname
+• mkfs -t vfat partitionname
+
+@Mount / Umount
+• Linux presents all filesystems as one directory tree. To add a new device with a filesystem on it its filesystem needs to be made part of that one directory tree.
+• The way attaching the new filesystem under an existing (preferably empty) directory, which is part of the existing directory tree – is know as “mount” point.
+• mount partition directory
+• umount directory
+• Mount may be used automatically by listing them in the file /etc/fstab
+
+@Swap
+• Swap space in Linux is a partition or file that is used to move the contents of inactive pages of RAM to when RAM becomes full.
+• Linux can use either a normal file in the filesystem or a separate partition for swap space. A swap partition is faster.
+• mkswap partition
+• swapon partition
+• Self study UUID’s
+
+@Disk Checks
+• Good disk maintenance requires periodic disk 
+checks.
+• Default checks will normally be run after 20 
+system reboots, but if your system stays up 
+for weeks or months at a time, you’ll want to 
+force a check from time to time.
+• Your best tool is fsck, and should be run at 
+least monthly.
+• fsck partition
+• fsck -p partition
+
+#ch4
+@Chapter 4: Advanced Storage Device Administration
+• What is RAID?
+• RAID stands for “Redundant Array of Inexpensive Disks”.
+• The basic idea behind RAID is to combine multiple small, inexpensive disk drives into an array which yields performance exceeding that of one large and expensive drive.
+• This array of drives will appear to the computer as a single logical storage unit or drive
+
+@RAID
+• RAID is a method by which information is spread across several disks, using techniques such as:
+• Disk Striping (RAID Level 0)
+• Disk Mirroring (RAID level 1)
+• Striping with distributed parity (RAID Level 4/5).
+• Linear RAID
+
+@Configuring Logical Volume Management
+
+• Logical Volume Management (LVM) is a 
+widely-used technique for deploying logical 
+rather than physical storage.
+• LVM, "logical" partitions can span across 
+physical hard drives and can be resized.
+• A physical disk is divided into one or more 
+physical volumes (PVs). Logical Volume 
+Groups (VGs) are then created by combining 
+PVs
+
+@LVM1 vs LVM2
+
+Features                                    LVM1            LVM2
+RHEL 3 support                              YES             NO
+RHEL 4 support                              NO              YES
+Transactional metadata for fast recovery    NO              YES
+Striped volume expansion                    NO              YES
+Max number PVs,LVs                    256 PVs, 256LVs       2**32 PVs,2**32 LVs
+Max device size                            2 Terabytes      8 Exabytes(64-bit CPUs)
+Volume mirroring support                    NO              YES
+
+
+#ch5
+@Network Configuration
+Basic Network Configuration:
+• IP Address & Subnet Mask.
+• Working With VLSM
+• Default Gateway.
+• Route.
+
+@Configuring Network Interface
+• Most network devices are supported by modern kernels. But you will need to configure your devices to fit into your network.
+• They will need an IP address (IPv4, IPv6 or both), possibly a number of gateways/routers has to be made known to allow access to other networks and the default route needs to be set.
+• The basic tools for this process are ifconfig and route
+
+@Commands
+• ifconfig enp0s3 *.*.*.* netmask *.*.*.*
+• ifconfig enp0s3 up/down
+• route add -net 172.16.0.0 netmask 255.255.255.0 gw gwname
+• route add default gw gwname
+• The network name default is a shorthand for 
+0.0.0.0, which denotes the default route
+
+#ch6
+@System Maintenance
+• What is Backup?
+• Data backup involves the storing of files from
+your computer in another location. In this
+way, if there is ever any loss of data on your
+primary machine, you still have your data in
+backup in order to restore those files
+
+@System Backup – Why?
+Data backup is easy to do and can save you 
+great amounts of time as well as ensure that 
+your data is secure in the case of disaster
+
+@System Backup – Where?
+Feasibility
+– Privacy of Data
+– Cost
+• Local Backup
+• Online / Cloud Backup
+
+@System Backup – Where?
+• Local Backup
+• A local backup is a backup on disks, tape, or other 
+physical media that are housed on-site or nearby the 
+source. Because they are stored locally, they feature 
+faster backup and restore times and enable 
+organizations to have greater control over who has 
+accessto the data.
+• A major disadvantage to local backup is also one of its 
+conveniences: its proximity to its source. Because 
+these backups are at the same physical location as 
+their source, they are vulnerable to many of the same 
+threats the source is exposed to, such as fires, flood 
+and other natural disasters
+
+@System Backup – Where?
+• Online / Cloud Backup
+• In comparison, a cloud backup is an online backup
+that is stored in a remote location. Unlike local
+backups, cloud backups are managed by a third party.
+• The use of a cloud backup service tends to be more
+easily scalable than local backup, is accessible from
+anywhere. And, because it is offsite, your data won’t
+be impacted by an on-site disaster.
+• A disadvantage is cloud backup will be slower than a
+local backup, and there are security concerns with the
+use of public or private clouds given your data is in
+the hands of a third party.
+
+@System Backup – What?
+• What should we take as backup?
+• Important Data:
+– Users home directory.
+– Users E-mails
+– Any other data specify by user.
+
+@System Backup – When?
+• When should we take backup?
+• It’s depends on organization policy and Type 
+of Backup.
+– Can be Daily.
+– Can be Weekly.
+– Can be Real Time
+
+
+@System Backup – How?
+• How should we take backup?
+• There are different utilities are available:
+• rsync
+– Rsync is a utility to copy / synchronize files from one 
+location to the other while keeping the required 
+bandwidth low.
+• tar
+– The tar utility is used to combine multiple files and 
+directories into a continuous stream of bytes.
+• dd
+– Using the dd utility, whole disks/partitions can be 
+transferred from / to files or other disks / partitions
+
+#ch7
+@Basic Network Services
+• DNS
+• Web Services
+• NFS
+• Samba
+
+@DNS
+• Domain name system is distributed hierarchical
+database. 
+computer
+It contains information about 
+IP
+the 
+addresses and associated Fully
+qualified domains.
+• The Propose of Domain name system is to
+resolve the Name of a computer into IP address.
+• Human cannot remember the IP addresses, they
+remember the name of domains, for example
+you know your domain hct.edu.om but you do
+not know the IP address of this domain.
+
+@DNS Roles
+Following are different roles of a DNS server:
+• Primary DNS server
+• Secondary DNS Server
+• Slave DNS server
+• Caching only DNS server
+
+@Installing DNS Server:
+Step 1: System Update:
+apt-get update
+Step 2: Install DNS Package:
+apt-get install bind9
+Step 3: Install DNS utilities:
+apt-get install dnsutils
+
+@Configuring Cache DNS Server:
+The most used and default configuration is using 
+your server as a caching server. This means that 
+the DNS will get the answer to name queries, 
+cache it and use the answer again when the 
+domain is queried for another time.
+• vi /etc/bind/named.conf.options
+Add the following block to it, here we have used
+Google’s DNS.
+forwarders {
+8.8.8.8;
+};
+
+@HTTP Server
+• The Apache HTTP server is the most widelyused web server in the world.
+• It provides many powerful features including
+dynamically loadable modules, robust media
+support, and extensive integration with other
+popular software
+
+@NFS
+NFS (Network File Share) is a protocol that allows
+you to share directories and files with other Linux
+clients in a network. The directory to be shared is
+usually created on the NFS server and files added to
+it.
+The client systems mount the directory residing on
+the NFS server, which grants them access to the files
+created. NFS comes in handy when you need to share
+common data among client systems especially when
+they are running out of space
+
+@Configuring NFS Server
+• Step 1: update
+• Step 2: Install NFS Server
+• Step 3: Create NFS Export Dir & Grant
+NFS Access to the Client.
+• Step 4: Modify export file.
+• Step 5: Export File System
+• Step 6: Restart Service.
+• Step 7: Allow NFS in Firewall
+
+@Samba Server
+• A Samba file server enables file sharing across
+different operating systems over a network. It lets you
+access your desktop files from a laptop and share files
+with Windows and Mac OS users.
+• It comprises several programs that serve different
+purposes, the most important two of which are:
+• smbd: provides SMB service (file sharing and printing),
+can also act as a Windows domain controller.
+• nmbd: This daemon provides NetBIOS name service,
+listens for name-server requests. It also allows the
+Samba server to be found by other computers on the
+network
+
+@What Can Samba Do?
+• Serve directory trees and printers to Linux, UNIX, and 
+Windows clients.
+• Assist in network browsing (with or without NetBIOS).
+• Authenticate Windows domain logins.
+• Act as a Windows NT-style Primary Domain Controller 
+(PDC).
+• Act as a Backup Domain Controller (BDC) for a Sambabased PDC.
+• Act as an Active Directory domain member server.
+• Join a Windows NT/2000/2003 PDC
+
+#ch8
+@DHCP
+ Dynamic Host Configuration Protocol (DHCP), help in managing and distribute IP
+addresses to client computers. DHCP failover is an advanced feature that can
+prevent clients from losing access to the network in case of a DHCP server failure.
+ DHCP plays an important role in OS infrastructure to distribute important network
+configuration information to network clients, and it provides configuration
+information to other network-enabled services, including Windows Deployment
+Services and Network Access Protection (NAP).
+ DHCP is based heavily on the Bootstrap Protocol (BOOTP), which was one of the
+early network protocols used to obtain an IP address from a configuration server.
+ Windows Server 2016 improves the functionality of DHCP by providing failover
+capabilities. The DHCP server service
+ DHCP server service
+ DHCP options
+ DHCP console
+ DHCP scopes
+ DHCP database
+
+@How DHCP Assigns IP addresses 
+ The process of Assigning IP address is also called the “DORA (discover, offer,
+Request, Acknowledgement)” Process. This process takes place as follows:
+1) The clients at boot up and makes a UDP broadcast for DHCP Server
+discovery.
+2) The server receives the DISCOVER packet. Based on availability and
+usage policies set on the server, the server determines an appropriate
+address (if any) to give to the client. The server then temporarily reserves
+that address for the client and sends back to the client an OFFER.
+3) The client sends a REQUEST (or DHCPREQUEST) packet, letting the server
+know that it intends to use the address.
+4) The server sends an ACK (or DHCPACK) packet, confirming that the
+client has a been given a lease on the address for a server-specified
+period of time.
+
+
+#ch9
+Chapter 9: Firewall Installation, Configuration & Port Security
+What exactly is a Firewall?
+Consider the internet to be inferno of viruses, hackers and cyber criminals all looking for systems
+that they can invade. Rather like a firewall in real life it stops any of this unpleasantness from spreading 
+into your environment. Another good analogy is that of a fortress wall that protects the inhabitants that 
+live inside. The firewall stops unwanted connections from entering your internal network much like 
+the wall around a fortress prevented the marauding hoards in medieval times. Rather like the gate in
+the fortress wall the firewall allows only data and connections that meet certain criteria to pass
+through the wall to the internal network.
+The firewall is typically positioned between the outside internet connection coming in through the
+modem and the internal network on which reside a number of Linux and Windows systems. The
+firewall controls all data traffic and filters out anything that is not permitted to enter the internal
+network.
+How a Firewall Works
+A typical firewall can perform a number of tasks depending on the complexity of the firewall itself.
+The basic functions of a firewall are as follows:
+Stealth Mode - Discarding Pings
+This requires a little explanation. There is a common mechanism in networked environments for 
+finding out if a particular system is up and running and connected to the network. Typically a 
+utility called ping is given the IP address of the remote system. The ping utility sends a data 
+packet to the remote system represented by the IP address and waits for a reply. If it gets a reply
+then the user knows that the system at that address is available on the network.
+While this seems innocuous enough there is actually good reason to configure your firewall to
+not respond to ping requests. You‘ve probably seen the old war movies (and some newones
+too) where the destroyer on the surface of the ocean uses sonar to try to locate a submarine 
+somewhere in the depths below. The sonar sends out pings and waits to see if the sounds bounce 
+back off the hull of the submarine. When the destroyer gets an echo it drops depth charges in an 
+attempt to destroy the submarine. Compare this to your Linux system. The hacker will send 
+out ping packets to every IP address on the planet and attack those that reply. By not responding
+to the ping packet you have a greater chance of remaining anonymous to the attacker; rather 
+like a stealth submarine that is impervious to sonar.
+Port Forwarding and Blocking
+Port blocking is the most fundamental level of firewall security and will be used by most home
+or small business users to protect their systems.
+As mentioned previously, computer systems communicate through ports. A firewall can be used 
+to block any ports that you do not want to be open to your systems inside the firewall. For 
+example, FTP operates through port 21. If you do not wish anyone on the outside to have ftp
+access to your systems you will need to configure your firewall to block port 21.
+Conversely, Port Forwarding is also a very useful tool to have. Suppose you have three Linux systems 
+on your internal network and want to be able to telnet into one of those systems when you are outside 
+your firewall (perhaps at the local café using the free Wi-Fi connection while you drink your coffee or 
+while in a hotel on a business trip). In this situation you will configureyour firewall to forward port 21 
+connections to the system you want to access from outside. When you connect to your IP address using 
+telnet the firewall will see the packets arriving on port 21 and know that it must forward them to the IP
+address of the machine you have designated. If you have more than one system on your network it is 
+essential that you set up port forwarding to handle this. After all, without port forwarding how would
+the router know which internal system you wanted to connect to?
+Packet Filtering
+Packet filtering is a much more advanced mechanism for providing security and is not
+available in typical small business or home use router devices.
+Here, data is transmitted over networks and the Internet in what are called packets. Each packet
+contains information about where the data came from and where it is going to (i.e.the IP
+address of the sender and your IP address). In fact, a packet contains a great dealof
+information about the nature of data being transmitted and many advanced firewall solutions 
+allow you to filter the data packets coming in through your internet connection to allow or 
+disallow packets depending on what are called filtering rules. For example, you might allow a 
+telnet session (which allows you to log into your Linux system from outside) but disallow ftp 
+packets (which allow files to be transferred to and from your Linux system). You may also
+choose to block packets arriving from an IP address that you know to be suspicious.
+Port numbers which are recognized by Internet and other network protocols, enable the
+computer to interact with others. Each Linux server has a port number (see /etc/services file).
+For example:
+1. TCP port 80 - HTTP Server
+2. TCP port 443 - HTTPS Server
+3. TCP port 25 - Mail Server
+4. TCP port 22 - OpenSSH (remote) secure shell server
+5. TCP port 110 - POP3 (Post Office Protocol v3) server
+6. TCP port 143 - Internet Message Access Protocol (IMAP) — management of email
+messages
+7. TCP / UDP port 53 - Domain Name System (DNS)
+IP Tables
+iptables is used to manage packet filtering and NAT rules. IPTables comes with all Linux
+distributions. Understanding how to setup and configure iptables will help you manage your
+Linux firewall effectively. The iptables tool is used to manage the Linux firewall rules. At
+a first look, iptables might look complex (or even confusing). But once you understand the basics 
+of how iptables work and how it is structured, reading and writing iptables firewall ruleswill be
+easy. On a high-level, iptables might contain multiple tables. Tables mightcontain multiple 
+chains. Chains can be built-in or user-defined. Chains might contain multiple rules. Rules are
+defined for the packets.
+So, the structure is: iptables Tables Chains Rules
+This is defined in the following diagram:
+Figure 9.1: IPTables Table, Chain, and Rule Structure
+IPTABLES, TABLES and CHAINS
+IPTables has the following 4 built-in tables:
+i. Filter Table
+Filter is default table for iptables. So, if you don‘t define you own table, you‘ll be using filter
+Table. Iptables‘s Filter Table has the following built-in chains:
+INPUT chain - Incoming to firewall. For packets coming to the local server. OUTPUT chain
+- Outgoing from firewall. For packets generated locally and going out of the local server.
+FORWARD chain - Packet for another NIC on the local server. For packets routed through
+the local server.
+ii. NAT Table
+Iptable‘s NAT Table has the following built-in chains:
+PREROUTING Chain - Alters packets before routing. Packet translation happens
+immediately after the packet comes to the system (and before routing). This helps to translate
+the destination ip address of the packets to something that matches the routing on the local
+server. This is used for DNAT (destination NAT).
+POSTROUTING Chain - Alters packets after routing. Packet translation happens when
+the packets are leaving the system. This helps to translate the source ip address of the packets
+to something that might match the routing on the destination server. This is used for SNAT
+(source NAT).
+OUTPUT Chain - NAT for locally generated packets on the firewall.
+iii. Mangle Table
+Iptables‘s Mangle Table is for specialized packet alteration. This alters QOS bits in the TCP
+header.
+Mangle Table has the following built-in chains:
+ PREROUTING chain
+ OUTPUT chain
+ FORWARD chain
+ INPUT chain
+ POSTROUTING chain
+iv. Raw Table
+Iptable‘s Raw Table is for configuration exemptions. Raw Table has the following built-in
+chains:
+ PREROUTING Chain
+ OUTPUT Chain
+The following diagram shows the three important tables in iptables:
+Figure 9.2: IPTables built-in tables
+IPTABLES RULES
+Following are the key points to remember for the iptables rules:
+ Rules contain a criteria and a target.
+ If the criteria are matched, it goes to the rules specified in the target, or executes the special
+values mentioned in the target.
+ If the criteria are not matched, it moves on to the next rule.
+Target Values
+Following are the possible special values that you can specify in the target:
+ ACCEPT - Firewall will accept the packet.
+ DROP - Firewall will drop the packet.
+ QUEUE - Firewall will pass the packet to the user space.
+ RETURN - Firewall will stop executing the next set of rules in the current chain for this
+packet. The control will be returned to the calling chain.
+If you do iptables - list or service iptables status, you‘ll see all the available firewall rules on your
+system. The following iptable example shows that there are no firewall rules defined on this system. 
+As you see, it displays the default input table, with the default input chain, forward chain, and output
+chain.
+# iptables -t filter --list
+Chain INPUT (policy ACCEPT)
+target prot opt source destination
+Chain FORWARD (policy ACCEPT)
+target prot opt source destination
+Chain OUTPUT (policy ACCEPT)
+target prot opt source destination
+Do the following to view the mangle table.
+# iptables -t mangle --list
+Do the following to view the nat table.
+# iptables -t nat --list
+Do the following to view the raw table.
+# iptables -t raw –list
+Note: If you don‘t specify the -t option, it will display the default filter table. So, both of the
+following commands are the same.
+# iptables -t filter --list
+(or)
+# iptables –list
+The following iptable example shows that there are some rules defined in the input, forward, and
+output chain of the filter table.
+# iptables --list
+Chain INPUT (policy ACCEPT)
+num target prot opt source destination
+1 RH-Firewall-1-
+INPUT all --
+0.0.0.0/0Chain
+FORWARD (policy
+ACCEPT)
+num target prot opt 
+source destination1 RHFirewall-1-INPUT all --
+0.0.0.0/0
+Chain OUTPUT (policy ACCEPT)
+num target prot opt
+source destination Chain
+RH-Firewall-1-INPUT (2
+references)
+num target prot opt source destination
+1 ACCEPT all -- 0.0.0.0/0 0.0.0.0/0
+2 ACCEPT icmp -- 0.0.0.0/0 0.0.0.0/0 icmp type 255
+3 ACCEPT esp -- 0.0.0.0/0 0.0.0.0/0
+4 ACCEPT ah --0.0.0.0/0 0.0.0.0/0
+5 ACCEPT udp -- 0.0.0.0/0 224.0.0.251 udp dpt:5353
+6 ACCEPT udp -- 0.0.0.0/0 0.0.0.0/0 udp dpt:631
+7 ACCEPT tcp -- 0.0.0.0/0 0.0.0.0/0 tcp dpt:631
+8 ACCEPT all -- 0.0.0.0/0 0.0.0.0/0 state RELATED,ESTABLISHED
+9 ACCEPT tcp -- 0.0.0.0/0 0.0.0.0/0 state NEW tcp dpt:22
+10 REJECT all -- 0.0.0.0/0 0.0.0.0/0 reject-with icmp-host-prohibited
+The rules in the iptables -list command output contains the following fields:
+ num - Rule number within the particular chain
+ target - Special target variable that we discussed above
+ prot - Protocols. tcp, udp, icmp, etc.,
+ opt - Special options for that specific rule.
+ source - Source ip-address of the packet
+ destination - Destination ip-address for the packet
+Block Incoming Port
+The syntax is as follows to block incoming port using IPtables:
+/sbin/iptables -A INPUT -p tcp --destination-port {PORTNUMBER-HERE} -j DROP### interface section use eth1 ###
+/sbin/iptables -A INPUT -i eth1 -p tcp --destination-port {PORT-NUMBERHERE} -j DROP### only drop port for given IP or Subnet ##
+/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port {PORT-NUMBER-HERE} -
+s
+{IP- ADDRESS-HERE} -j DROP
+/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port {PORT-NUMBER-HERE} -
+s
+{IP/SUBNET-HERE} -j DROP
+To block port80 (HTTP server), enter (or add to your
+iptables shell script):# /sbin/iptables -A INPUT -p tcp --
+destination-port 80 –j DROP
+# /sbin/service iptables save
+Block Incomming Port 80 except for IP Address 1.2.3.4
+# /sbin/iptables -A INPUT -p tcp -i eth1 -s ! 1.2.3.4 --dport 80 -j DROP
+Block Outgoing Port
+The syntax is as follows:
+/sbin/iptables -A OUTPUT -p tcp --dport {PORT-NUMBERHERE} -j DROP### interface section use eth1 ###
+/sbin/iptables -A OUTPUT -i eth1 -p tcp --dport {PORT-NUMBERHERE} -j DROP### only drop port for given IP or Subnet ##
+/sbin/iptables -A OUTPUT -i eth0 -p tcp --destination-port {PORTNUMBER-HERE} -s {IP- ADDRESS-HERE} -j DROP
+/sbin/iptables -A OUTPUT -i eth0 -p tcp --destination-port {PORT-NUMBERHERE} -s
+{IP/SUBNET-HERE} -j DROP
+To block outgoing port # 25, enter:
+# /sbin/iptables -A OUTPUT -p tcp --dport 25 -j DROP #
+/sbin/service iptables saveYou can block port # 1234 for IP
+address 192.168.1.2 only:
+# /sbin/iptables -A OUTPUT -p tcp -d 192.168.1.2 --dport 1234 -j DROP # 
+/sbin/service iptables sav

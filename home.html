@@ -1,0 +1,70 @@
+dns:
+Step 1: System Update:
+apt-get update
+Step 2: Install DNS Package:
+apt-get install bind9
+Step 3: Install DNS utilities:
+apt-get install dnsutils
+
+vi /etc/bind/named.conf.options
+Add the following block to it, here we have used
+Google’s DNS.
+forwarders {
+8.8.8.8;
+};
+
+NFS:
+Sept 2:
+apt install nfs-kernel-server
+Sept 3:
+# mkdir /mnt/server_share
+# chown nobody:nogroup
+/mnt/server_share
+# chmod 777 /mnt/server_share
+Sept 4:
+# nano /etc/exports
+Add line:
+/mnt/server_share 192.168.31.0/24 (rw, sync)
+# exportfs -aSept 6:
+# systemctl restart nfs-kernel -server
+Sept 7:
+# ufw allow from 192.168.31.0/24 to any 
+port nfs
+# ufw enable
+# ufw status
+
+Configuring NFS Client
+Sept 2:
+# apt install nfs-common
+Sept 3:
+# mkdir /mnt/client_share
+# mount 192.168.31.10:/mnt/server_share
+/mnt/client_share
+
+firewall:
+-Display rules all rules with the rule number.
+#iptables --list --line-numbers
+
+-Display rules from mangle table
+#iptables –t mangle --list 
+
+-Display rules from filter table
+#iptables –t filter --list
+
+-Add a rule to stop incoming packets for HTTP for entire network.
+#iptables –A INPUT -p tcp --dport 80 –j DROP
+
+-Add a rule in mangle table to stop outgoing packets for SMTP for entire network.
+#iptables –t mangle –A OUTPUT –p tcp –dport 25 –j DROP
+
+-To backup iptables in file called myrules.v4, Save firewall rules in a file named 
+“my_rules.txt”.
+#Iptables-save > /var/myrules.v4
+
+-Delete all rules from your firewall.
+#Iptables –f
+
+-Restore firewall from your backup file.
+#Iptables-restore > /var/myrules.v4
+
+
